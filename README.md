@@ -11,13 +11,13 @@ Converts filename based version/source control to a git repo.
 
 ## Argument Documentation
 Expected commandline: 
-'''
+```
 pypenv run python main.py <dir_to_scan> <pattern> <new_file_name>
-'''
+```
 
 Example (on Windows, untested on other envs):
-'''
+```
 pypenv run python main.py '/c/my_stuff' 'testfile_' 'test_project.py'
-'''
+```
 
 - after creating the git repo(s), see the following [link](https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/)
