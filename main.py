@@ -13,16 +13,12 @@ except ImportError:
             return pbs.Command(attr)
     sh = Sh()
 
-
-print("Arguments length and args:")
-print(len(sys.argv))
-print(str(sys.argv))
-
+print("arg len[" + str(len(sys.argv)) + "] argv: " + str(sys.argv))
 dir_to_scan = sys.argv[1]
 pattern_to_find = sys.argv[2]
 new_file_name = sys.argv[3]
 
-
+# prepare a /working/ directory to perform all work in and create the git repo in
 workingdir = dir_to_scan + '/working'
 try:
     os.mkdir(workingdir)
@@ -44,7 +40,8 @@ filenames = list(filter(lambda x: x.startswith(pattern_to_find), filenames))
 # order the files by moddate to create the history correctly
 filenames.sort(key = lambda x: os.stat(x).st_mtime)
 
-
+# iterate all filtered, ordered files and individually commit them
+# using their original file name and modified by dates
 for filename in filenames:
     info = os.stat(filename)
     print(filename, info.st_mtime)
@@ -53,4 +50,5 @@ for filename in filenames:
     print(git.commit(m='update to version \'' + filename + '\'', date=info.st_mtime))
 
 
-print('Exit Successful')
+print('Conversion to git repo successful')
+print('see [https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/] for information on how to publish the repo to GitHub')
