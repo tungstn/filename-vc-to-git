@@ -4,27 +4,7 @@
 import os
 import sys
 
-print("Arguments length and args:")
-print(len(sys.argv))
-print(str(sys.argv))
-
-dir_to_scan = sys.argv[1]
-pattern_to_find = sys.argv[2]
-new_file_name = sys.argv[3]
-
-
-
-os.chdir(dir_to_scan)
-filenames = os.listdir()
-
-filenames = filter(lambda x: x.startswith(pattern_to_find), filenames)
-
-for filename in filenames:
-    info = os.stat(filename)
-    print(filename, info.st_mtime)
-
-
-#sys.argv[1]
+from shutil import copyfile
 
 try:
     import sh
@@ -37,6 +17,15 @@ except ImportError:
     sh = Sh()
 
 
+print("Arguments length and args:")
+print(len(sys.argv))
+print(str(sys.argv))
+
+dir_to_scan = sys.argv[1]
+pattern_to_find = sys.argv[2]
+new_file_name = sys.argv[3]
+
+
 workingdir = dir_to_scan + '/working'
 try:
     os.mkdir(workingdir)
@@ -46,16 +35,35 @@ except:
 
 git = sh.git.bake(_cwd=workingdir)
 print(git.init())
+
+
+os.chdir(dir_to_scan)
+filenames = os.listdir()
+
+# only read files that match the expected pattern
+filenames = list(filter(lambda x: x.startswith(pattern_to_find), filenames))
+
+# order the files by moddate to create the history correctly
+filenames.sort(key = lambda x: os.stat(x).st_mtime)
+
+
+for filename in filenames:
+    info = os.stat(filename)
+    print(filename, info.st_mtime)
+    copyfile(filename, workingdir  + '/' + new_file_name)
+    print(git.add(new_file_name))
+    print(git.commit(m='update to version \'' + filename + '\'' ))
+
+
+#sys.argv[1]
+
+ 
 # print(git.status())
 # checkout and track a remote branch
-# print git.checkout('-b', 'somebranch')
-fakefile = os.open(workingdir+'/fake.txt', os.O_RDWR|os.O_CREAT)
-os.close(fakefile)
+# print git.checkout('-b', 'somebranch') 
 
 # add a file
-print(git.add('.'))
 # commit
-print(git.commit(m='my commit message'))
 # now we are one commit ahead
 # print(git.status() )
 
