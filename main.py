@@ -1,11 +1,8 @@
 # /c/Users/xxx/AppData/Roaming/Python/Python37/Scripts/pipenv.exe run python main.py 'path' 'pattern**' 'newfilename.txt'
 
-
 import os
 import sys
-
 from shutil import copyfile
-
 try:
     import sh
 except ImportError:
@@ -33,10 +30,11 @@ except:
     print('workingdir already exists')
 
 
+# initialize git repo in /working/
 git = sh.git.bake(_cwd=workingdir)
 print(git.init())
 
-
+# chdir and read all filenames
 os.chdir(dir_to_scan)
 filenames = os.listdir()
 
@@ -52,20 +50,7 @@ for filename in filenames:
     print(filename, info.st_mtime)
     copyfile(filename, workingdir  + '/' + new_file_name)
     print(git.add(new_file_name))
-    print(git.commit(m='update to version \'' + filename + '\'' ))
-
-
-#sys.argv[1]
-
- 
-# print(git.status())
-# checkout and track a remote branch
-# print git.checkout('-b', 'somebranch') 
-
-# add a file
-# commit
-# now we are one commit ahead
-# print(git.status() )
+    print(git.commit(m='update to version \'' + filename + '\'', date=info.st_mtime))
 
 
 print('Exit Successful')
