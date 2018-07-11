@@ -35,7 +35,7 @@ os.chdir(dir_to_scan)
 filenames = os.listdir()
 
 # only read files that match the expected pattern
-filenames = list(filter(lambda x: x.startswith(pattern_to_find), filenames))
+filenames = list(filter(lambda x: (pattern_to_find in x), filenames))
 
 # order the files by moddate to create the history correctly
 filenames.sort(key = lambda x: os.stat(x).st_mtime)
