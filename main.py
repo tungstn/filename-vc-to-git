@@ -51,4 +51,4 @@ for filename in filenames:
 
 
 print('Conversion to git repo successful')
-print('see [https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/] for information on how to publish the repo to GitHub')
+print('see [https://github.com/tungstn/filename-vc-to-git] for information')
