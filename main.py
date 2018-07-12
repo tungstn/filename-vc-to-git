@@ -47,7 +47,7 @@ for filename in filenames:
     print(filename, info.st_mtime)
     copyfile(filename, workingdir  + '/' + new_file_name)
     print(git.add(new_file_name))
-    print(git.commit(m='update to version \'' + filename + '\'', date=info.st_mtime))
+    print(git.commit('--allow-empty', m='update to version \'' + filename + '\'', date=info.st_mtime))
 
 
 print('Conversion to git repo successful')
